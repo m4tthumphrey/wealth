@@ -10,11 +10,11 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
-        <ul class="flex justify-between">
+        <ul class="flex justify-between gap-5 p-5 flex-wrap">
             @foreach ($totals as $total)
-                <li class="p-6 text-center md:p-20">
-                    <div class="text-sm md:text-lg">{{ $total->name }}</div>
-                    <div class="text-xl font-bold md:text-3xl lg:text-5xl">&pound;{{ number_format($total->total) }}</div>
+                <li class="text-center">
+                    <div class="text-xs md:text-lg">{{ $total->name }}</div>
+                    <div class="text-lg font-bold md:text-2xl lg:text-5xl">&pound;{{ number_format($total->total) }}</div>
                 </li>
             @endforeach
         </ul>
