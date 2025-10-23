@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <!-- Styles / Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body>
+        <table class="w-full text-sm md:text-xl">
+            <thead>
+                <tr>
+                    <td class="p-3 border-b font-bold">Who</td>
+                    <td class="p-3 border-b font-bold">Description</td>
+                    <td class="p-3 border-b font-bold">Regular Amount</td>
+                    <td class="p-3 border-b font-bold">Current Amount</td>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($sources as $source)
+            <tr>
+                <td class="p-3 border-b">{{ $source->who }}</td>
+                <td class="p-3 border-b">{{ $source->description }}</td>
+                <td class="p-3 border-b"><div class="flex w-full"><span class="py-1">&pound;</span><input type="number" value="{{ $source->regular_amount }}" data-id="{{ $source->id }}" data-name="regular" class="amount p-1 grow max-w-16 md:max-w-none" /></div></td>
+                <td class="p-3 border-b"><div class="flex w-full"><span class="py-1">&pound;</span><input type="number" value="{{ $source->current_amount }}" data-id="{{ $source->id }}" data-name="current" class="amount p-1 grow max-w-16 md:max-w-none" /></div></td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </body>
+</html>
