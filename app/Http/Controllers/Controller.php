@@ -21,18 +21,18 @@ class Controller
     {
         $id    = $request->get('id');
         $name  = $request->get('name');
-        $value = $request->get('value');
+        $value = $request->integer('value');
 
         $source = Source::findOrFail($id);
 
-        if ($name === 'current') {
+        if ($name === 'current' && $value !== $source->current_amount) {
             $source->current_amount = $value;
             $source->save();
 
             $source->values()->create([
                 'value' => $value
             ]);
-        } else {
+        } elseif ($value !== $source->regular_amount) {
             $source->regular_amount = $value;
             $source->save();
         }
