@@ -116,7 +116,7 @@ class WealthController
 
     private function updateAmount(Source $source, int $amount)
     {
-        if ($amount != $source->current_amount) {
+        if ($amount > 0 && $amount != $source->current_amount) {
             $source->current_amount = $amount;
             $source->save();
 
