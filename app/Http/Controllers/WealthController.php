@@ -15,8 +15,8 @@ class WealthController
         $sources = Source::all();
         $totals  = DB::select("
             select c.name, sum(s.current_amount) as total
-            from sources s
-            join source_categories c on (c.id = s.category_id)
+            from wealth_sources s
+            join wealth_source_categories c on (c.id = s.category_id)
             group by c.id");
 
         $totals[] = (object) [
