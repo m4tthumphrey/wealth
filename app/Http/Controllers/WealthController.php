@@ -17,7 +17,13 @@ class WealthController
 
     public function data(): array
     {
-        $sources = Source::all();
+        $sources = DB::select("
+            SELECT s.id, s.who, s.description, s.category_id, c.name as category_name,
+                   s.regular_amount, s.current_amount
+            FROM wealth_sources s
+            JOIN wealth_source_categories c ON c.id = s.category_id
+            ORDER BY s.category_id, s.id
+        ");
         $totals  = DB::select("
             select c.name, sum(s.current_amount) as total
             from wealth_sources s
@@ -34,6 +40,39 @@ class WealthController
         return [
             'sources' => $sources,
             'totals'  => $totals,
+        ];
+    }
+
+    public function history(): array
+    {
+        $totalOverTime = DB::select("
+            SELECT d.date, SUM(COALESCE((
+                SELECT sv.value
+                FROM wealth_source_values sv
+                WHERE sv.source_id = s.id AND DATE(sv.created_at) <= d.date
+                ORDER BY sv.created_at DESC
+                LIMIT 1
+            ), 0)) as total
+            FROM (SELECT DISTINCT DATE(created_at) as date FROM wealth_source_values) d
+            CROSS JOIN wealth_sources s
+            GROUP BY d.date
+            ORDER BY d.date ASC
+        ");
+
+        $bySource = DB::select("
+            SELECT sv.source_id as id, sv.value, DATE(sv.created_at) as date
+            FROM wealth_source_values sv
+            INNER JOIN (
+                SELECT source_id, DATE(created_at) as date, MAX(id) as max_id
+                FROM wealth_source_values
+                GROUP BY source_id, DATE(created_at)
+            ) latest ON sv.id = latest.max_id
+            ORDER BY sv.source_id, DATE(sv.created_at) ASC
+        ");
+
+        return [
+            'total_over_time' => $totalOverTime,
+            'by_source'       => $bySource,
         ];
     }
 

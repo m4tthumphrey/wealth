@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth.basic'], function () {
     Route::name('wealth.')->prefix('wealth')->controller(WealthController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/data', 'data')->name('data');
+        Route::get('/history', 'history')->name('history');
         Route::post('/update', 'update')->name('update');
         Route::post('/screenshot', 'screenshot')->name('screenshot');
     });
