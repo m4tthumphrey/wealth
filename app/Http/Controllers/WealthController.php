@@ -12,6 +12,11 @@ class WealthController
 {
     public function index(): View
     {
+        return view('wealth.index');
+    }
+
+    public function data(): array
+    {
         $sources = Source::all();
         $totals  = DB::select("
             select c.name, sum(s.current_amount) as total
@@ -26,10 +31,10 @@ class WealthController
             })
         ];
 
-        return view('index', [
+        return [
             'sources' => $sources,
-            'totals'  => $totals
-        ]);
+            'totals'  => $totals,
+        ];
     }
 
     public function update(Request $request): array
