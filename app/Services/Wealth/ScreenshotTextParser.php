@@ -55,11 +55,15 @@ class ScreenshotTextParser
 
         $updates = [];
 
-        if (($amount = $this->amountAfterLabel($lines, 'Total savings')) !== null) {
+        // source 5 = "Aegon Pension (Windsor)", source 6 = "Aegon ISA" --
+        // must read the individual "Aegon SIPP Pension" / "Retiready ISA"
+        // figures, not "Total savings" (the combined total of both, which
+        // isn't a real source and was the original bug being reported).
+        if (($amount = $this->amountAfterLabel($lines, 'Aegon SIPP Pension')) !== null) {
             $updates[5] = $amount;
         }
 
-        if (($amount = $this->amountAfterLabel($lines, 'Aegon SIPP Pension')) !== null) {
+        if (($amount = $this->amountAfterLabel($lines, 'Retiready ISA')) !== null) {
             $updates[6] = $amount;
         }
 
